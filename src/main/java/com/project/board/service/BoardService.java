@@ -81,6 +81,6 @@ public class BoardService {
 
         // 목록: id, 작성자, 글제목, 조회수, 날짜
         Page<BoardDTO> boardDTOS = boardEntities.map(board -> new BoardDTO(board.getId(), board.getBoardWriter(), board.getBoardTitle(), board.getBoardHits(), board.getCreatedTime()));
-
+        return boardDTOS;
     }
 }
