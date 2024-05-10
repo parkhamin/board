@@ -49,7 +49,8 @@ public class BoardService {
             String storedFileName = System.currentTimeMillis() + " " + originalFilename; // 3.
             String savePath = "C:/springboot_img/" + storedFileName; // 4.
             boardFile.transferTo(new File(savePath)); // 5.
-
+            BoardEntity boardEntity = BoardEntity.toSaveFileEntity(boardDTO);
+            Long id = boardRepository.save(boardEntity).getId();
         }
     }
 
