@@ -2,6 +2,8 @@ package com.project.board.service;
 
 import com.project.board.dto.BoardDTO;
 import com.project.board.entity.BoardEntity;
+import com.project.board.entity.BoardFileEntity;
+import com.project.board.repository.BoardFileRepository;
 import com.project.board.repository.BoardRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final BoardFileRepository boardFileRepository;
 
     public void save(BoardDTO boardDTO) throws IOException {
         // 파일 첨부 여부에 따라 로직 분리
@@ -50,7 +53,11 @@ public class BoardService {
             String savePath = "C:/springboot_img/" + storedFileName; // 4.
             boardFile.transferTo(new File(savePath)); // 5.
             BoardEntity boardEntity = BoardEntity.toSaveFileEntity(boardDTO);
-            Long id = boardRepository.save(boardEntity).getId();
+            Long savedId = boardRepository.save(boardEntity).getId();
+            BoardEntity board = boardRepository.findById(savedId).get();
+
+            BoardFileEntity boardFileEntity = BoardFileEntity.toBoardFileEntity(board, originalFilename, storedFileName);
+            boardFileRepository.save(boardFileEntity);
         }
     }
 
